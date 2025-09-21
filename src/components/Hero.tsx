@@ -42,13 +42,13 @@ const Hero: React.FC = () => {
           <div className="flex-1 relative">
             <div className="relative w-80 h-80 mx-auto">
               <img
-                src="https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://cdnl.iconscout.com/lottie/free/thumb/free-cooking-6834623-5605459.gif"
                 alt="Smart Kitchen"
                 className="w-full h-full object-cover rounded-3xl shadow-2xl"
               />
               
               {/* Floating elements */}
-              <div className="absolute -top-4 -left-4 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 animate-bounce">
+              <div className="absolute -top-4 -left-7 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 animate-bounce">
                 <Leaf className="w-8 h-8 text-green-200" />
               </div>
               <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 animate-bounce delay-1000">

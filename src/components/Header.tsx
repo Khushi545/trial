@@ -1,5 +1,6 @@
 import React from 'react';
-import { BookDown as Bowl, LogOut, User } from 'lucide-react';
+import { ChefHat as Bowl, LogOut, User } from 'lucide-react';
+
 import { User as UserType } from '../types';
 
 interface HeaderProps {
@@ -23,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-orange-500 rounded-full flex items-center justify-center">
               <Bowl className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-green-600 font-heading">
+            <span className="text-2xl font-bold text-green-650 font-heading">
               RasoiMate
             </span>
           </div>

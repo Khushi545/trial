@@ -140,7 +140,7 @@ const Donation: React.FC = () => {
             </div>
             
             <p className="text-center font-semibold text-green-600 text-lg">
-              Thank you for making a difference! 🙏
+              Thank you for making a difference!
             </p>
           </div>
         </div>

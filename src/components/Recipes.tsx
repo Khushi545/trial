@@ -95,7 +95,7 @@ const Recipes: React.FC<RecipesProps> = ({ availableIngredients }) => {
   };
 
   return (
-    <section id="recipes" className="py-16 bg-white">
+    <section id="recipes" className="py-16 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">

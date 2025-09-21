@@ -67,11 +67,12 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
   };
 
   return (
-    <section id="inventory" className="py-16 bg-gray-50">
+    <section id="inventory" className="py-16 bg-blue-50">
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <Package className="w-8 h-8 text-green-500" />
+            <Package className="w-8 h-8 text-blue-500" />
             <h2 className="text-4xl font-bold text-gray-800 font-heading">Kitchen Inventory</h2>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookDown as Bowl, Instagram, Twitter, Facebook } from 'lucide-react';
+import { ChefHat as Bowl, Instagram, Twitter, Facebook } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
