@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import MonthlyReportButton from './components/MonthlyReportButton';
 import MonthlyReportModal from './components/MonthlyReportModal';
+import AuthDebug from './components/AuthDebug';
 import { useAuth } from './hooks/useAuth';
 import { useInventory } from './hooks/useInventory';
 
@@ -19,17 +20,21 @@ function App() {
   const { items, addItem, updateItem, deleteItem } = useInventory();
 
   useEffect(() => {
+    console.log('App useEffect - loading:', loading, 'user:', user?.email || 'null', 'showAuthModal:', showAuthModal);
     // Show auth modal if no user is logged in and not loading
     if (!loading && !user) {
+      console.log('Setting showAuthModal to true - no user and not loading');
       setShowAuthModal(true);
     } else if (user) {
+      console.log('Setting showAuthModal to false - user exists:', user.email);
       setShowAuthModal(false);
     }
-  }, [user, loading]);
+  }, [user, loading, showAuthModal]);
 
   const handleAuthSuccess = (_userData: { email: string }) => {
     // Firebase auth automatically updates user state, so just close modal
-    setShowAuthModal(false);
+    // We'll let the useEffect handle closing the modal when user state updates
+    console.log('Authentication successful, waiting for user state update');
   };
 
   const handleLogout = () => {
@@ -39,6 +44,7 @@ function App() {
 
   // Show loading spinner while Firebase auth is initializing
   if (loading) {
+    console.log('Rendering loading screen');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -51,11 +57,15 @@ function App() {
 
   // Always show auth modal when no user is logged in
   if (!user || showAuthModal) {
+    console.log('Rendering AuthModal - user:', user?.email || 'null', 'showAuthModal:', showAuthModal);
     return <AuthModal onAuthSuccess={handleAuthSuccess} />;
   }
 
+  console.log('Rendering main app for user:', user?.email);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <AuthDebug />
       <Header user={user} onLogout={handleLogout} />
       <Hero />
       <Features />

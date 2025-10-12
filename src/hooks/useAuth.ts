@@ -15,10 +15,13 @@ export function useAuth() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+      console.log('Firebase auth state changed:', firebaseUser?.email || 'No user');
       if (firebaseUser) {
         setUser({ email: firebaseUser.email || '' });
+        console.log('User set in state:', firebaseUser.email);
       } else {
         setUser(null);
+        console.log('User cleared from state');
       }
       setLoading(false);
     });

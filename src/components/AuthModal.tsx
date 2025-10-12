@@ -6,7 +6,7 @@ interface AuthModalProps {
   onAuthSuccess: (userData: { email: string }) => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess: _onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +40,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
       if (isLogin) {
         const success = await login(email.trim(), password);
         if (success) {
-          onAuthSuccess({ email: email.trim() });
+          // Don't call onAuthSuccess immediately - let Firebase auth state change handle it
+          console.log('Login successful, Firebase will handle state update');
         } else {
           setError('Invalid email or password. Please check your credentials.');
         }
