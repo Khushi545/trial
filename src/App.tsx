@@ -7,11 +7,14 @@ import Recipes from './components/Recipes';
 import Donation from './components/Donation';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
+import MonthlyReportButton from './components/MonthlyReportButton';
+import MonthlyReportModal from './components/MonthlyReportModal';
 import { useAuth } from './hooks/useAuth';
 import { useInventory } from './hooks/useInventory';
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showMonthlyReport, setShowMonthlyReport] = useState(false);
   const { user, logout, loading } = useAuth();
   const { items, addItem, updateItem, deleteItem } = useInventory();
 
@@ -56,6 +59,12 @@ function App() {
       <Header user={user} onLogout={handleLogout} />
       <Hero />
       <Features />
+      
+      {/* Monthly Report Button */}
+      <div className="container mx-auto px-4">
+        <MonthlyReportButton onClick={() => setShowMonthlyReport(true)} />
+      </div>
+      
       <Inventory 
         items={items}
         onAddItem={addItem}
@@ -65,6 +74,13 @@ function App() {
       <Recipes availableIngredients={items} />
       <Donation />
       <Footer />
+      
+      {/* Monthly Report Modal */}
+      <MonthlyReportModal
+        isOpen={showMonthlyReport}
+        onClose={() => setShowMonthlyReport(false)}
+        inventoryItems={items}
+      />
     </div>
   );
 }
