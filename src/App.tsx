@@ -12,21 +12,20 @@ import { useInventory } from './hooks/useInventory';
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const { user, login, register, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { items, addItem, updateItem, deleteItem } = useInventory();
 
   useEffect(() => {
-    // Always show auth modal if no user is logged in
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) {
+    // Show auth modal if no user is logged in and not loading
+    if (!loading && !user) {
       setShowAuthModal(true);
-    } else {
+    } else if (user) {
       setShowAuthModal(false);
     }
-  }, []);
+  }, [user, loading]);
 
-  const handleAuthSuccess = (userData: { email: string }) => {
-    login(userData.email);
+  const handleAuthSuccess = (_userData: { email: string }) => {
+    // Firebase auth automatically updates user state, so just close modal
     setShowAuthModal(false);
   };
 
@@ -35,13 +34,25 @@ function App() {
     setShowAuthModal(true);
   };
 
+  // Show loading spinner while Firebase auth is initializing
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Always show auth modal when no user is logged in
   if (!user || showAuthModal) {
     return <AuthModal onAuthSuccess={handleAuthSuccess} />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header user={user} onLogout={handleLogout} />
       <Hero />
       <Features />

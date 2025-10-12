@@ -1,62 +1,60 @@
 import { useState, useEffect } from 'react';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { auth } from '../config/firebase';
 import { User } from '../types';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      setUser({ email: currentUser });
-    }
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        setUser({ email: firebaseUser.email || '' });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = (email: string) => {
-    const userData = { email };
-    setUser(userData);
-    localStorage.setItem('currentUser', email);
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
+    }
   };
 
   const register = async (email: string, password: string): Promise<boolean> => {
-    // Initialize users array if it doesn't exist
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (users.find((u: any) => u.email === email)) {
-      return false; // User already exists
-    }
-    
-    users.push({ email, password });
-    localStorage.setItem('users', JSON.stringify(users));
-    return true;
-  };
-
-  const authenticate = async (email: string, password: string): Promise<boolean> => {
-    // Initialize users array if it doesn't exist
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Add a default demo user if no users exist
-    if (users.length === 0) {
-      const defaultUsers = [
-        { email: 'test@example.com', password: 'password123' },
-        { email: 'demo@rasoimate.com', password: 'demo123' }
-      ];
-      localStorage.setItem('users', JSON.stringify(defaultUsers));
-      users.push(...defaultUsers);
-    }
-    
-    const user = users.find((u: any) => u.email === email && u.password === password);
-    
-    if (user) {
-      login(email);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
       return true;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('currentUser');
+  // authenticate function is now handled by the login function
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
-  return { user, login, register, authenticate, logout };
+  return { user, login, register, logout, loading };
 }

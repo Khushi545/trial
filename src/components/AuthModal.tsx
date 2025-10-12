@@ -14,7 +14,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { authenticate, register } = useAuth();
+  const { login, register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +38,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
 
     try {
       if (isLogin) {
-        const success = await authenticate(email.trim(), password);
+        const success = await login(email.trim(), password);
         if (success) {
           onAuthSuccess({ email: email.trim() });
         } else {
-          setError('Invalid email or password');
+          setError('Invalid email or password. Please check your credentials.');
         }
       } else {
         const success = await register(email.trim(), password);
@@ -51,10 +51,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
           setIsLogin(true);
           setPassword('');
         } else {
-          setError('User already exists with this email');
+          setError('Registration failed. Email might already be in use.');
         }
       }
-    } catch (err) {
+    } catch (_err) {
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -63,15 +63,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-green-500/30 via-orange-500/30 to-pink-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-200">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-200 dark:border-gray-700">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <Bowl className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 font-heading mb-2">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 font-heading mb-2">
             Welcome to RasoiMate
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             {isLogin ? 'Sign in to your account' : 'Create your account'}
           </p>
         </div>
@@ -84,7 +84,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-gray-800"
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                 placeholder="Enter your email"
                 required
               />
@@ -96,14 +96,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-gray-800"
+                className="w-full pl-12 pr-12 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                 placeholder="Enter your password (min 6 characters)"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>
@@ -113,8 +113,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
           {error && (
             <div className={`p-4 rounded-2xl text-sm font-medium ${
               error.includes('successful') 
-                ? 'bg-green-100 text-green-800 border border-green-200' 
-                : 'bg-red-100 text-red-800 border border-red-200'
+                ? 'bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800/40' 
+                : 'bg-red-100 text-red-800 border border-red-200 dark:bg-red-900/30 dark:text-red-200 dark:border-red-800/40'
             }`}>
               {error}
             </div>
@@ -139,7 +139,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
           </button>
 
           <div className="text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               {isLogin ? "Don't have an account?" : 'Already have an account?'}
               <button
                 type="button"
@@ -148,7 +148,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
                   setError('');
                   setPassword('');
                 }}
-                className="ml-2 text-green-600 hover:text-green-700 font-semibold transition-colors"
+                className="ml-2 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-semibold transition-colors"
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
@@ -157,9 +157,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ onAuthSuccess }) => {
         </form>
         
         {/* Demo credentials hint */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-200">
-          <p className="text-sm text-blue-800 text-center">
-            <strong>Demo:</strong> Create any account or use test@example.com / password123
+        <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-2xl border border-blue-200 dark:border-blue-800/40">
+          <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
+            <strong>Firebase Auth:</strong> Create a new account or sign in with existing credentials
           </p>
         </div>
       </div>

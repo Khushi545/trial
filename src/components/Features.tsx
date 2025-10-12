@@ -26,13 +26,13 @@ const Features: React.FC = () => {
   return (
     <>
       {/* What We Do Section */}
-      <section id="what-we-do" className="py-16 bg-gradient-to-r from-gray-50 to-white">
+      <section id="what-we-do" className="py-16 bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Lightbulb className="w-8 h-8 text-orange-500" />
-            <h2 className="text-4xl font-bold text-gray-800 font-heading">What We Do</h2>
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100 font-heading">What We Do</h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             RasoiMate is your smart kitchen companion, helping you track inventory, discover recipes, 
             and donate surplus food to those in need.
           </p>
@@ -40,7 +40,7 @@ const Features: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 bg-white">
+      <section id="features" className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => {
@@ -48,19 +48,19 @@ const Features: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className="group bg-gradient-to-br from-gray-50 to-white p-8 rounded-3xl border border-gray-200 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 relative overflow-hidden"
+                  className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 dark:via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   
                   <div className={`w-20 h-20 bg-gradient-to-br ${feature.color} rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300`}>
                     <IconComponent className="w-10 h-10 text-white" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center font-heading">
+                  <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center font-heading">
                     {feature.title}
                   </h3>
                   
-                  <p className="text-gray-600 text-center leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-300 text-center leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

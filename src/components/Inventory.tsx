@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Package, Plus, Edit2, Trash2, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
+import { Package, Plus, Edit2, Trash2, Calendar, AlertCircle, CheckCircle, CalendarClock } from 'lucide-react';
 import { InventoryItem } from '../types';
 import AddItemModal from './AddItemModal';
+import EditExpiryModal from './EditExpiryModal';
 
 interface InventoryProps {
   items: InventoryItem[];
@@ -12,6 +13,7 @@ interface InventoryProps {
 
 const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, onDeleteItem }) => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingExpiryItem, setEditingExpiryItem] = useState<InventoryItem | null>(null);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -67,15 +69,15 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
   };
 
   return (
-    <section id="inventory" className="py-16 bg-blue-50">
+    <section id="inventory" className="py-16 bg-blue-50 dark:bg-gray-900">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Package className="w-8 h-8 text-blue-500" />
-            <h2 className="text-4xl font-bold text-gray-800 font-heading">Kitchen Inventory</h2>
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100 font-heading">Kitchen Inventory</h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Keep track of your ingredients with smart expiry alerts
           </p>
         </div>
@@ -84,7 +86,7 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
           {items.map((item) => (
             <div
               key={item.id}
-              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 ${
+              className={`bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 ${
                 item.status === 'fresh' ? 'border-green-500' :
                 item.status === 'expiring' ? 'border-yellow-500' : 'border-red-500'
               }`}
@@ -93,7 +95,7 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
                 <img
                   src={item.image || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400'}
                   alt={item.name}
-                  className="w-16 h-16 rounded-full object-cover mx-auto border-4 border-gray-200"
+                  className="w-16 h-16 rounded-full object-cover mx-auto border-4 border-gray-200 dark:border-gray-700"
                 />
                 <div className="absolute top-0 right-0 flex gap-1">
                   <button
@@ -102,6 +104,13 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
                     title="Edit item"
                   >
                     <Edit2 className="w-4 h-4 text-blue-600" />
+                  </button>
+                  <button
+                    onClick={() => setEditingExpiryItem(item)}
+                    className="w-8 h-8 bg-yellow-100 hover:bg-yellow-200 rounded-full flex items-center justify-center transition-colors"
+                    title="Edit expiry"
+                  >
+                    <CalendarClock className="w-4 h-4 text-yellow-600" />
                   </button>
                   <button
                     onClick={() => handleDeleteItem(item)}
@@ -114,13 +123,13 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
               </div>
 
               <div className="text-center">
-                <h4 className="text-xl font-bold text-gray-800 mb-2 font-heading">
+                <h4 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 font-heading">
                   {item.name}
                 </h4>
-                <p className="text-gray-600 mb-2">{item.quantity}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-2">{item.quantity}</p>
                 
                 {item.expiry && (
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-3">
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                     <Calendar className="w-4 h-4" />
                     <span>Expiry: {new Date(item.expiry).toLocaleDateString()}</span>
                   </div>
@@ -149,6 +158,17 @@ const Inventory: React.FC<InventoryProps> = ({ items, onAddItem, onUpdateItem, o
           <AddItemModal
             onClose={() => setShowAddModal(false)}
             onAddItem={onAddItem}
+          />
+        )}
+
+        {editingExpiryItem && (
+          <EditExpiryModal
+            item={editingExpiryItem}
+            onClose={() => setEditingExpiryItem(null)}
+            onSave={(newDate) => {
+              onUpdateItem(editingExpiryItem.id, { expiry: newDate });
+              setEditingExpiryItem(null);
+            }}
           />
         )}
       </div>
